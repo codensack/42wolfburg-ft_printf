@@ -14,21 +14,21 @@
 # define FT_PRINTF_H
 
 # include <stdarg.h>
-# include "../lib/libft/include/libft.h"
+# include "../lib/school42-libft2024/libft.h"
 # include "ft_printf_utils.h"
 
-typedef struct s_printf
+typedef struct s_format_spec
 {
-	char	flag_left_justify;
-	char    flag_always_sign;
-	char	flag_blank_before_positive_num;
-	char	flag_preceed_hex_oct;
-	char	flag_fill_zeros_left;
+	int		print_percent;
+	int		flag_left_justify;
+	int		flag_always_sign;
+	int		flag_blank_before_positive_num;
+	int		flag_indicate_hex_oct;
+	int		flag_fill_zeros_left;
 	int		min_width;
-	int		precision;
-
-} t_printf;
-
+	int		max_length;
+	char	specifier;
+} t_format_spec;
 
 int	ft_printf(const char *s, ...);
 #endif
