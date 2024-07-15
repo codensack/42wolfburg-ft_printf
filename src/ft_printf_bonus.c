@@ -4,7 +4,6 @@
 
 void	ft_init_specs(t_format_spec *spec)
 {
-	spec->print_percent = 0;
 	spec->flag_left_justify = 0;
 	spec->flag_always_sign = 0;
 	spec->flag_blank_before_positive_num = 0;
@@ -12,18 +11,13 @@ void	ft_init_specs(t_format_spec *spec)
 	spec->flag_fill_zeros_left = 0;
 	spec->min_width = 0;
 	spec->max_length = 0;
-	spec->specifier = 0;
+	spec->type = 0;
 }
 
 void	ft_parse_spec(char **str, t_format_spec *spec)
 {
 	(*str)++;
 	ft_init_specs(spec);
-	if (**str == '%')
-	{
-		spec->print_percent = 1;
-		return ;
-	}
 	while (**str == '-' || **str == '+' || **str == ' ' || **str == '0' || **str == '#')
 	{
         if (**str == '-')
@@ -50,8 +44,56 @@ void	ft_parse_spec(char **str, t_format_spec *spec)
     }
 	while (ft_isdigit(**str))
         (*str)++;
-	if (**str == 'i' || **str == 'd' || **str == 'u' || **str == 'x' || **str == 'X' || **str == 'c' || **str == 's' || **str == 'p')
-		spec->specifier = **str;
+	if (**str == 'i' || **str == 'd' || **str == 'u' || **str == 'x' || **str == 'X' || **str == 'c' || **str == 's' || **str == 'p' || **str == '%')
+		spec->type = **str;
+}
+
+int	ft_printf(const char *s, ...)
+{
+	int	len;
+	int	fd;
+	va_list	vargs;
+	t_format_spec *spec;
+
+	spec = malloc(sizeof(t_format_spec));
+	len = 0;
+	fd = 1;
+	va_start(vargs, s);
+	while (*s)
+	{
+		if (*s == '%')
+		{
+			ft_parse_spec(&s, spec);
+			len += ft_print_arg(vargs, spec, fd);
+			s++;
+		}
+		else
+			len += ft_print_char(*(s++), fd);
+	}
+	va_end(vargs);
+	free(spec);
+	return (len);
+}
+
+int	ft_print_arg(va_list args, t_format_spec *spec, int fd)
+{
+	if (spec->type == 'd' || spec->type == 'i')
+		return (ft_print_int(va_arg(args, int), fd));
+	else if (spec->type == 'u')
+		return (ft_print_uint(va_arg(args, unsigned int), fd));
+	else if (spec->type == 'x')
+		return (ft_print_hex(va_arg(args, int), fd, 0));
+	else if (spec->type == 'X')
+		return (ft_print_hex(va_arg(args, int), fd, 1));
+	else if (spec->type == 'c')
+		return (ft_print_char(va_arg(args, int), fd));
+	else if (spec->type == 's')
+		return (ft_print_str(va_arg(args, char *), fd));
+	else if (spec->type == 'p')
+		return (ft_print_address(va_arg(args, unsigned long long int), fd, 1));
+	else if (spec->type == '%')
+		return (ft_print_char('%', fd));
+	return (-1);
 }
 
 int	main(void)
@@ -67,7 +109,6 @@ int	main(void)
 		if (*test == '%')
 		{
 			ft_parse_spec(&test, spec);
-			printf("Print percent: %d\n", spec->print_percent);
 			printf("Flag left justify: %d\n", spec->flag_left_justify);
 			printf("Flag always sign: %d\n", spec->flag_always_sign);
 			printf("Blank before pos-num: %d\n", spec->flag_blank_before_positive_num);
@@ -75,7 +116,7 @@ int	main(void)
 			printf("Fill zeros left: %d\n", spec->flag_fill_zeros_left);
 			printf("Min width: %d\n", spec->min_width);
 			printf("Length: %d\n", spec->max_length);
-			printf("Specifier: %c\n", spec->specifier);
+			printf("type: %c\n", spec->type);
 			printf("--------------------------------------\n");
 		}
 		*test++;
