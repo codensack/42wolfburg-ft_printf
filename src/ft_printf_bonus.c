@@ -2,6 +2,48 @@
 #include <stdio.h>
 #include "../include/ft_printf.h"
 
+int	ft_print_arg(va_list args, t_format_spec *spec, int fd);
+
+static int	ft_print_char(int c, int fd)
+{
+	ft_putchar_fd((char)c, fd);
+	return (1);
+}
+
+static int	ft_print_hex(int n, int fd, int is_uppercase)
+{
+	int				len;
+	unsigned int	nu;
+
+	nu = (unsigned int)n;
+	len = 1;
+	if (nu > 15)
+		len += ft_print_hex(nu / 16, fd, is_uppercase);
+	if (is_uppercase)
+		ft_putchar_fd("0123456789ABCDEF"[nu % 16], fd);
+	else
+		ft_putchar_fd("0123456789abcdef"[nu % 16], fd);
+	return (len);
+}
+
+static int	ft_print_int(int n, int fd)
+{
+	int	tmp;
+	int	len;
+
+	tmp = n;
+	len = 0;
+	if (n <= 0)
+		len++;
+	while (n != 0)
+	{
+		n /= 10;
+		len++;
+	}
+	ft_putnbr_fd(tmp, fd);
+	return (len);
+}
+
 void	ft_init_specs(t_format_spec *spec)
 {
 	spec->flag_left_justify = 0;
@@ -48,7 +90,7 @@ void	ft_parse_spec(char **str, t_format_spec *spec)
 		spec->type = **str;
 }
 
-int	ft_printf(const char *s, ...)
+int	ft_printf(char *s, ...)
 {
 	int	len;
 	int	fd;
@@ -109,7 +151,7 @@ int	main(void)
 		if (*test == '%')
 		{
 			ft_parse_spec(&test, spec);
-			printf("Flag left justify: %d\n", spec->flag_left_justify);
+			ft_printf("Flag left justify: %d\n", spec->flag_left_justify);
 			printf("Flag always sign: %d\n", spec->flag_always_sign);
 			printf("Blank before pos-num: %d\n", spec->flag_blank_before_positive_num);
 			printf("Indicate Hex/Oct: %d\n", spec->flag_indicate_hex_oct);

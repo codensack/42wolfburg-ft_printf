@@ -29,5 +29,5 @@ typedef struct s_format_spec
 	char	type;
 } t_format_spec;
 
-int	ft_printf(const char *s, ...);
+int	ft_printf(char *s, ...);
 #endif
