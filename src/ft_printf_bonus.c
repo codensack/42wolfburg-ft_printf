@@ -49,39 +49,50 @@ int	ft_print_str(char *s, int fd)
 
 #include <stdio.h>
 
+void	ft_print_left(char *s, t_format_spec *spec, int len, int fd)
+{
+		ft_putstr_fd(s, fd);
+		if (spec->min_width > len)
+		{
+			while (len <= spec->min_width)
+			{
+				write(1, " ", 1);
+				len++;
+			}
+		}
+}
+
+void	ft_print_right(char *s, t_format_spec *spec, int len, int fd)
+{
+		if (spec->min_width > len)
+		{
+			while (len <= spec->min_width)
+			{
+				write(1, " ", 1);
+				len++;
+			}
+		}
+		ft_putstr_fd(s, fd);
+}
+
 int	ft_print_str_with_flags(char *s, t_format_spec *spec, int fd)
 {
-	int	len;
+	int		len;
+	char	*str;
 
-	// printf("Das hier ist der übergebene String: %s\n", s);
 	if (!s)
 		return (ft_print_str("(null)", 1));
 	len = ft_strlen(s);
-	// printf("Ist flag_print_left set: %d\n", spec->flag_print_left);
+	if (spec->max_length < len)
+		len = spec->max_length;
+	str = ft_substr(s, 0, len);
+	if (!str)
+		return (0);
 	if (spec->flag_print_left)
-	{
-		ft_putstr_fd(s, fd);
-		if (spec->min_width > len)
-		{
-			while (len <= spec->min_width)
-			{
-				write(1, " ", 1);
-				len++;
-			}
-		}
-	}
+		ft_print_left(str, spec, len, fd);
 	else
-	{
-		if (spec->min_width > len)
-		{
-			while (len <= spec->min_width)
-			{
-				write(1, " ", 1);
-				len++;
-			}
-		}
-		ft_putstr_fd(s, fd);
-	}
+		ft_print_right(str, spec, len, fd);
+	free(str);
 	return (len);
 }
 
@@ -217,6 +228,10 @@ int	ft_printf(char *s, ...)
 int	main(void)
 {
 	ft_printf("Das hier ist ein %-10.2s, haha %%, das geht!\n", "HAHA");
+	ft_printf("Das hier ist ein %-10.10s, haha %%, das geht!\n", "HAHA");
+	ft_printf("Das hier ist ein %-2.10s, haha %%, das geht!\n", "HAHA");
 	ft_printf("Das hier ist ein %10.2s, haha %%, das geht!\n", "HAHA");
+	ft_printf("Das hier ist ein %10.10s, haha %%, das geht!\n", "HAHA");
+	ft_printf("Das hier ist ein %2.10s, haha %%, das geht!\n", "HAHA");
 	return (0);
 }
