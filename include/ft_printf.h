@@ -19,7 +19,7 @@
 
 typedef struct s_format_spec
 {
-	int		flag_left_justify;
+	int		flag_print_left;
 	int		flag_always_sign;
 	int		flag_blank_before_positive_num;
 	int		flag_indicate_hex_oct;

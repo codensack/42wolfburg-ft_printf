@@ -2,12 +2,87 @@
 #include <stdio.h>
 #include "../include/ft_printf.h"
 
-int	ft_print_arg(va_list args, t_format_spec *spec, int fd);
+int	ft_print_address(unsigned long long int n, int fd, int prefix)
+{
+	int	len;
+
+	if (!n)
+		return (ft_print_str("(nil)", 1));
+	len = 1;
+	if (prefix)
+		len += ft_print_str("0x", 1);
+	if (n > 15)
+		len += ft_print_address(n / 16, fd, 0);
+	ft_putchar_fd("0123456789abcdef"[n % 16], fd);
+	return (len);
+}
+
+int	ft_print_uint(unsigned int n, int fd)
+{
+	int		len;
+
+	len = 1;
+	if (n >= 10)
+	{
+		len += ft_print_uint(n / 10, fd);
+	}
+	ft_putchar_fd(n % 10 + '0', fd);
+	return (len);
+}
 
 static int	ft_print_char(int c, int fd)
 {
 	ft_putchar_fd((char)c, fd);
 	return (1);
+}
+
+int	ft_print_str(char *s, int fd)
+{
+	int	len;
+
+	if (!s)
+		return (ft_print_str("(null)", 1));
+	len = ft_strlen(s);
+	ft_putstr_fd(s, fd);
+	return (len);
+}
+
+#include <stdio.h>
+
+int	ft_print_str_with_flags(char *s, t_format_spec *spec, int fd)
+{
+	int	len;
+
+	// printf("Das hier ist der übergebene String: %s\n", s);
+	if (!s)
+		return (ft_print_str("(null)", 1));
+	len = ft_strlen(s);
+	// printf("Ist flag_print_left set: %d\n", spec->flag_print_left);
+	if (spec->flag_print_left)
+	{
+		ft_putstr_fd(s, fd);
+		if (spec->min_width > len)
+		{
+			while (len <= spec->min_width)
+			{
+				write(1, " ", 1);
+				len++;
+			}
+		}
+	}
+	else
+	{
+		if (spec->min_width > len)
+		{
+			while (len <= spec->min_width)
+			{
+				write(1, " ", 1);
+				len++;
+			}
+		}
+		ft_putstr_fd(s, fd);
+	}
+	return (len);
 }
 
 static int	ft_print_hex(int n, int fd, int is_uppercase)
@@ -46,7 +121,7 @@ static int	ft_print_int(int n, int fd)
 
 void	ft_init_specs(t_format_spec *spec)
 {
-	spec->flag_left_justify = 0;
+	spec->flag_print_left = 0;
 	spec->flag_always_sign = 0;
 	spec->flag_blank_before_positive_num = 0;
 	spec->flag_indicate_hex_oct = 0;
@@ -63,7 +138,7 @@ void	ft_parse_spec(char **str, t_format_spec *spec)
 	while (**str == '-' || **str == '+' || **str == ' ' || **str == '0' || **str == '#')
 	{
         if (**str == '-')
-			spec->flag_left_justify = 1;
+			spec->flag_print_left = 1;
         else if (**str == '+')
 			spec->flag_always_sign = 1;
         else if (**str == ' ')
@@ -88,6 +163,28 @@ void	ft_parse_spec(char **str, t_format_spec *spec)
         (*str)++;
 	if (**str == 'i' || **str == 'd' || **str == 'u' || **str == 'x' || **str == 'X' || **str == 'c' || **str == 's' || **str == 'p' || **str == '%')
 		spec->type = **str;
+}
+
+int	ft_print_arg(va_list args, t_format_spec *spec, int fd)
+{
+	if (spec->type == 'd' || spec->type == 'i')
+		return (ft_print_int(va_arg(args, int), fd));
+	else if (spec->type == 'u')
+		return (ft_print_uint(va_arg(args, unsigned int), fd));
+	else if (spec->type == 'x')
+		return (ft_print_hex(va_arg(args, int), fd, 0));
+	else if (spec->type == 'X')
+		return (ft_print_hex(va_arg(args, int), fd, 1));
+	else if (spec->type == 'c')
+		return (ft_print_char(va_arg(args, int), fd));
+	else if (spec->type == 's')
+		// return (ft_print_str(va_arg(args, char *), fd));
+		return (ft_print_str_with_flags(va_arg(args, char *), spec, fd));
+	else if (spec->type == 'p')
+		return (ft_print_address(va_arg(args, unsigned long long int), fd, 1));
+	else if (spec->type == '%') 
+		return (ft_print_char('%', fd));
+	return (-1);
 }
 
 int	ft_printf(char *s, ...)
@@ -117,51 +214,9 @@ int	ft_printf(char *s, ...)
 	return (len);
 }
 
-int	ft_print_arg(va_list args, t_format_spec *spec, int fd)
-{
-	if (spec->type == 'd' || spec->type == 'i')
-		return (ft_print_int(va_arg(args, int), fd));
-	else if (spec->type == 'u')
-		return (ft_print_uint(va_arg(args, unsigned int), fd));
-	else if (spec->type == 'x')
-		return (ft_print_hex(va_arg(args, int), fd, 0));
-	else if (spec->type == 'X')
-		return (ft_print_hex(va_arg(args, int), fd, 1));
-	else if (spec->type == 'c')
-		return (ft_print_char(va_arg(args, int), fd));
-	else if (spec->type == 's')
-		return (ft_print_str(va_arg(args, char *), fd));
-	else if (spec->type == 'p')
-		return (ft_print_address(va_arg(args, unsigned long long int), fd, 1));
-	else if (spec->type == '%')
-		return (ft_print_char('%', fd));
-	return (-1);
-}
-
 int	main(void)
 {
-	char 	*test = "Das hier ist ein %10.02s, haha %%, das geht % -0+0#05.6p";
-
-	t_format_spec *spec;
-
-	spec = malloc(sizeof(t_format_spec));
-	while (*test)
-	{
-		printf("Test: %c\n", *test);
-		if (*test == '%')
-		{
-			ft_parse_spec(&test, spec);
-			ft_printf("Flag left justify: %d\n", spec->flag_left_justify);
-			printf("Flag always sign: %d\n", spec->flag_always_sign);
-			printf("Blank before pos-num: %d\n", spec->flag_blank_before_positive_num);
-			printf("Indicate Hex/Oct: %d\n", spec->flag_indicate_hex_oct);
-			printf("Fill zeros left: %d\n", spec->flag_fill_zeros_left);
-			printf("Min width: %d\n", spec->min_width);
-			printf("Length: %d\n", spec->max_length);
-			printf("type: %c\n", spec->type);
-			printf("--------------------------------------\n");
-		}
-		*test++;
-	}
+	ft_printf("Das hier ist ein %-10.2s, haha %%, das geht!\n", "HAHA");
+	ft_printf("Das hier ist ein %10.2s, haha %%, das geht!\n", "HAHA");
 	return (0);
 }
