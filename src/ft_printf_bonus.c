@@ -54,7 +54,7 @@ void	ft_print_left(char *s, t_format_spec *spec, int len, int fd)
 		ft_putstr_fd(s, fd);
 		if (spec->min_width > len)
 		{
-			while (len <= spec->min_width)
+			while (len < spec->min_width)
 			{
 				write(1, " ", 1);
 				len++;
@@ -66,7 +66,7 @@ void	ft_print_right(char *s, t_format_spec *spec, int len, int fd)
 {
 		if (spec->min_width > len)
 		{
-			while (len <= spec->min_width)
+			while (len < spec->min_width)
 			{
 				write(1, " ", 1);
 				len++;
@@ -83,7 +83,7 @@ int	ft_print_str_with_flags(char *s, t_format_spec *spec, int fd)
 	if (!s)
 		return (ft_print_str("(null)", 1));
 	len = ft_strlen(s);
-	if (spec->max_length < len)
+	if (spec->max_length && spec->max_length < len)
 		len = spec->max_length;
 	str = ft_substr(s, 0, len);
 	if (!str)
@@ -189,7 +189,6 @@ int	ft_print_arg(va_list args, t_format_spec *spec, int fd)
 	else if (spec->type == 'c')
 		return (ft_print_char(va_arg(args, int), fd));
 	else if (spec->type == 's')
-		// return (ft_print_str(va_arg(args, char *), fd));
 		return (ft_print_str_with_flags(va_arg(args, char *), spec, fd));
 	else if (spec->type == 'p')
 		return (ft_print_address(va_arg(args, unsigned long long int), fd, 1));
@@ -227,11 +226,114 @@ int	ft_printf(char *s, ...)
 
 int	main(void)
 {
-	ft_printf("Das hier ist ein %-10.2s, haha %%, das geht!\n", "HAHA");
-	ft_printf("Das hier ist ein %-10.10s, haha %%, das geht!\n", "HAHA");
-	ft_printf("Das hier ist ein %-2.10s, haha %%, das geht!\n", "HAHA");
-	ft_printf("Das hier ist ein %10.2s, haha %%, das geht!\n", "HAHA");
-	ft_printf("Das hier ist ein %10.10s, haha %%, das geht!\n", "HAHA");
-	ft_printf("Das hier ist ein %2.10s, haha %%, das geht!\n", "HAHA");
+	// printf("Strings:\n");	
+	// printf("1String -5.2\t: [%-5.2s]\n", "halloechen");
+	// ft_printf("1ftString -5.2\t: [%-5.2s]\n", "halloechen");
+	// printf("7String -15\t: [%-15s]\n", "halloechen");
+	// ft_printf("7ftString -15\t: [%-15s]\n", "halloechen");
+	// printf("2String -5.6\t: [%-5.6s]\n", "halloechen");
+	// ft_printf("2ftString -5.6\t: [%-5.6s]\n", "halloechen");
+	// printf("3String -5.6 ha\t: [%-5.6s]\n", "ha");
+	// ft_printf("3ftString -5.6 ha\t: [%-5.6s]\n", "ha");
+	// printf("5String -5\t: [%-5s]\n", "halloechen");
+	// ft_printf("5ftString -5\t: [%-5s]\n", "halloechen");
+	// printf("4String 5.6 ha\t: [%5.6s]\n", "ha");
+	// ft_printf("4ftString 5.6 ha\t: [%5.6s]\n", "ha");
+	// printf("6String 5.2\t: [%5.2s]\n", "halloechen");
+	// ft_printf("6ftString 5.2\t: [%5.2s]\n", "halloechen");
+	// printf("8String 15\t: [%15s]\n", "halloechen");
+	// ft_printf("8ftString 15\t: [%15s]\n", "halloechen");
+	// printf("9String 20.5\t: [%20.5s]\n", "halloechen");
+	// ft_printf("9ftString 20.5\t: [%20.5s]\n", "halloechen");
+	// printf("aString 5.5\t: [%5.5s]\n", "halloechen");
+	// ft_printf("aftString 5.5\t: [%5.5s]\n", "halloechen");
+	// printf("bString 5\t: [%5s]\n", "halloechen");
+	// ft_printf("bftString 5\t: [%5s]\n", "halloechen");
+	printf("Int\n");
+	printf("1Int -11.5\t: [%-11.5i]\n", 11);
+	printf("1Int -11.2\t: [%-11.2i]\n", 11);
+	printf("1Int -11.2\t: [%-11.2i]\n", -11);
+	printf("1Int -11.1\t: [%-11.1i]\n", 11);
+	printf("1Int -11.1\t: [%-11.1i]\n", -11);
+	printf("1Int -11.1\t: [%-11.1i]\n", -11);
+	printf("2Int +-11.5\t: [% +-11.5i]\n", 11);
+	printf("3Int \' \'-11.5\t: [% -11.5i]\n", 11);
+	printf("3Int n\' \'-11.11\t: [% -11.11i]\n", -11);
+	printf("3Int n\' \'-11.5\t: [% -11.5i]\n", -11);
+	printf("4Int \' \'-11\t: [% -11i]\n", 11);
+	printf("5Int 011\t: [%011i]\n", 11);
+	printf("5Int 011\t: [%011i]\n", -11);
+	printf("5Int 011.5\t: [%011.5i]\n", 11);
+	printf("5Int 011.11\t: [%011.11i]\n", 11);
+	printf("51Int 11\t: [%11i]\n", 11);
+	printf("52Int 11\t: [%11i]\n", -11);
+	printf("6Int -11\t: [%-11i]\n", 11);
+	printf("61Int -11\t: [%-11i]\n", -11);
+	printf("7Int -11.5\t: [%-11.5i]\n", -11);
+	printf("71Int 11.5\t: [%11.5i]\n", -11);
+	printf("8Int +-11.5\t: [%+-11.5i]\n", -11);
+	printf("9Int \' \'-11.5\t: [% -11.5i]\n", -11);
+	printf("aInt -5.15\t: [%-5.15i]\n", 11);
+	printf("bInt +-5.15\t: [%+-5.15i]\n", 11);
+	printf("cInt \' \' -5.15\t: [% -5.15i]\n", 11);
+	printf("dInt \' \' -5.15\t: [% -5.15i]\n", -11);
+	printf("eInt \' \' 5.15\t: [% 5.15i]\n", 11);
+	printf("eInt \' \' 5.5\t: [% 5.5i]\n", 11);
+	printf("eInt \' \' 5.5\t: [% 5.2i]\n", 11111);
+	printf("\nDez\n");
+	printf("1Dez -11.5\t: [%-11.5d]\n", 11);
+	printf("1Dez -11.2\t: [%-11.2d]\n", 11);
+	printf("1Dez -11.2\t: [%-11.2d]\n", -11);
+	printf("1Dez -11.1\t: [%-11.1d]\n", 11);
+	printf("1Dez -11.1\t: [%-11.1d]\n", -11);
+	printf("2Dez +-11.5\t: [%+-11.5d]\n", 11);
+	printf("3Dez \' \'-11.5\t: [% -11.5d]\n", 11);
+	printf("3Dez \' \'-11.5\t: [% -11.5d]\n", -11);
+	printf("4Dez \' \'-11\t: [% -11d]\n", 11);
+	printf("5Dez 011\t: [%011d]\n", 11);
+	printf("51Dez 11\t: [%11d]\n", 11);
+	printf("52Dez 11\t: [%11d]\n", -11);
+	printf("6Dez -11\t: [%-11d]\n", 11);
+	printf("61Dez -11\t: [%-11d]\n", -11);
+	printf("7Dez -11.5\t: [%-11.5d]\n", -11);
+	printf("71Dez 11.5\t: [%11.5d]\n", -11);
+	printf("8Dez +-11.5\t: [%+-11.5d]\n", -11);
+	printf("9Dez \' \'-11.5\t: [% -11.5d]\n", -11);
+	printf("aDez -5.15\t: [%-5.15d]\n", 11);
+	printf("bDez +-5.15\t: [%+-5.15d]\n", 11);
+	printf("cDez \' \' -5.15\t: [% -5.15d]\n", 11);
+	printf("dDez \' \' -5.15\t: [% -5.15d]\n", -11);
+	printf("eDez \' \' 5.15\t: [% 5.15d]\n", 11);
+	printf("fDez 2\t\t: [%2d]\n", 11);
+	printf("gDez 1\t\t: [%1d]\n", 11);
+	printf("hDez \' \' 2\t: [% 2d]\n", 11);
+	printf("iDez \' \' 2\t: [% 2d]\n", -11);
+	printf("\nDez 0\n");
+	printf("1Dez 0 -11.5\t: [%-11.5d]\n", 0);
+	printf("1Dez 0 -11.2\t: [%-11.2d]\n", 0);
+	printf("1Dez 0 -11.1\t: [%-11.1d]\n", 0);
+	printf("2Dez 0 +-11.5\t: [%+-11.5d]\n", 0);
+	printf("3Dez 0 \' \'-11.5\t: [% -11.5d]\n", 0);
+	printf("4Dez 0 \' \'-11\t: [% -11d]\n", 0);
+	printf("5Dez 0 011\t: [%011d]\n", 0);
+	// printf("5Dez 0 00\t: [%00d]\n", 0); // does not work
+	printf("51Dez 0 11\t: [%11d]\n", 0);
+	printf("6Dez 0 -11\t: [%-11d]\n", 0);
+	printf("61Dez 0 -11\t: [%-11d]\n", 0);
+	printf("7Dez 0 -11.5\t: [%-11.5d]\n", 0);
+	printf("71Dez 0 11.5\t: [%11.5d]\n", 0);
+	printf("8Dez 0 +-11.5\t: [%+-11.5d]\n", 0);
+	printf("8Dez 0 +11.5\t: [%+11.5d]\n", 0);
+	printf("9Dez 0 \' \'-11.5\t: [% -11.5d]\n", 0);
+	printf("aDez 0 -5.15\t: [%-5.15d]\n", 0);
+	printf("bDez 0 +-5.15\t: [%+-5.15d]\n", 0);
+	printf("bDez 0 +5.15\t: [%+5.15d]\n", 0);
+	printf("cDez 0 \' \' -5.15\t: [% -5.15d]\n", 0);
+	printf("dDez 0 \' \' -5.15\t: [% -5.15d]\n", 0);
+	printf("eDez 0 \' \' 5.15\t: [% 5.15d]\n", 0);
+	printf("fDez 0 2\t\t: [%2d]\n", 0);
+	printf("gDez 0 1\t\t: [%1d]\n", 0);
+	printf("hDez 0 \' \' 2\t: [% 2d]\n", 0);
+	printf("iDez 0 \' \' 2\t: [% 2d]\n", 0);
 	return (0);
 }
