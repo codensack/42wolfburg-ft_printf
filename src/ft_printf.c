@@ -1,10 +1,5 @@
 #include "../include/ft_printf.h"
 
-static int	ft_print_arg(va_list args, char c, int fd);
-static int	ft_print_int(int n, int fd);
-static int	ft_print_hex(int n, int fd, int is_uppercase);
-static int	ft_print_char(int c, int fd);
-
 int	ft_printf(const char *s, ...)
 {
 	int	len;
@@ -28,7 +23,7 @@ int	ft_printf(const char *s, ...)
 	return (len);
 }
 
-static int	ft_print_arg(va_list args, char c, int fd)
+int	ft_print_arg(va_list args, char c, int fd)
 {
 	if (c == 'd' || c == 'i')
 		return (ft_print_int(va_arg(args, int), fd));
@@ -47,44 +42,4 @@ static int	ft_print_arg(va_list args, char c, int fd)
 	else if (c == '%')
 		return (ft_print_char('%', fd));
 	return (-1);
-}
-
-static int	ft_print_int(int n, int fd)
-{
-	int	tmp;
-	int	len;
-
-	tmp = n;
-	len = 0;
-	if (n <= 0)
-		len++;
-	while (n != 0)
-	{
-		n /= 10;
-		len++;
-	}
-	ft_putnbr_fd(tmp, fd);
-	return (len);
-}
-
-static int	ft_print_hex(int n, int fd, int is_uppercase)
-{
-	int				len;
-	unsigned int	nu;
-
-	nu = (unsigned int)n;
-	len = 1;
-	if (nu > 15)
-		len += ft_print_hex(nu / 16, fd, is_uppercase);
-	if (is_uppercase)
-		ft_putchar_fd("0123456789ABCDEF"[nu % 16], fd);
-	else
-		ft_putchar_fd("0123456789abcdef"[nu % 16], fd);
-	return (len);
-}
-
-static int	ft_print_char(int c, int fd)
-{
-	ft_putchar_fd((char)c, fd);
-	return (1);
 }

@@ -1,7 +1,7 @@
 #===============================================================================
 # Variables ====================================================================
 #===============================================================================
-NAME	:=	libftprintf.a
+NAME		:=	libftprintf.a
 
 # Directories ------------------------------------------------------------------
 LIBFT_DIR	:=	lib/libft/
@@ -9,14 +9,14 @@ SRC_DIR		:=	src/
 OBJ_DIR		:=	build/
 
 # Files ------------------------------------------------------------------------
-FILES		:=	ft_printf.c ft_printf_utils.c
+FILES		:=	ft_printf.c ft_printf_utils_alpha.c ft_printf_utils_numbers.c
 LIBFT_FILES	:=	ft_putnbr_fd.c ft_putchar_fd.c ft_putnbr_fd.c\
-			ft_putstr_fd.c ft_strlen.c
-OBJ		:=	$(addprefix $(OBJ_DIR), $(FILES:.c=.o))
+				ft_putstr_fd.c ft_strlen.c
+OBJ			:=	$(addprefix $(OBJ_DIR), $(FILES:.c=.o))
 LIBFT_OBJ	:=	$(addprefix $(OBJ_DIR), $(LIBFT_FILES:.c=.o))
 
 # Compiler ---------------------------------------------------------------------
-CC		:=	cc
+CC			:=	cc
 DEBUG		:=	no
 ifeq ($(DEBUG), yes)
 FLAG		:=	-g -W
@@ -52,4 +52,4 @@ fclean: clean
 re: fclean all
 
 # PHONY ------------------------------------------------------------------------
-.PHONY: clean all fclean re
+.PHONY: all make_build_dir clean fclean re

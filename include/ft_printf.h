@@ -14,20 +14,29 @@
 # define FT_PRINTF_H
 
 # include <stdarg.h>
-# include "../lib/school42-libft2024/libft.h"
-# include "ft_printf_utils.h"
+# include "../lib/libft/libft.h"
 
 typedef struct s_format_spec
 {
-	int		flag_print_left;
-	int		flag_always_sign;
-	int		flag_blank_before_positive_num;
-	int		flag_indicate_hex_oct;
-	int		flag_fill_zeros_left;
-	int		min_width;	// min space used
-	int		max_length; // precision and string-len printed
+	int		print_left;
+	int		always_sign;
+	int		space_before_positive_num;
+	int		indicate_hex_oct;
+	int		fill_zeros_left;
+	int		min_space_used;
+	int		max_length_param; 
 	char	type;
 } t_format_spec;
 
+// ft_printf.c
 int	ft_printf(char *s, ...);
+int	ft_print_arg(va_list args, t_format_spec *spec, int fd);
+// ft_printf_utils_numbers.c
+int	ft_print_int(int n, int fd);
+int	ft_print_uint(unsigned int n, int fd);
+int	ft_print_hex(int n, int fd, int is_uppercase);
+int	ft_print_address(unsigned long long int n, int fd, int prefix);
+// ft_printf_utils_alpha.c
+int	ft_print_char(int c, int fd);
+int	ft_print_str(char *s, int fd);
 #endif

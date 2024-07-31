@@ -12,6 +12,12 @@
 
 #include "../include/ft_printf.h"
 
+int	ft_print_char(int c, int fd)
+{
+	ft_putchar_fd((char)c, fd);
+	return (1);
+}
+
 int	ft_print_str(char *s, int fd)
 {
 	int	len;
@@ -20,33 +26,5 @@ int	ft_print_str(char *s, int fd)
 		return (ft_print_str("(null)", 1));
 	len = ft_strlen(s);
 	ft_putstr_fd(s, fd);
-	return (len);
-}
-
-int	ft_print_address(unsigned long long int n, int fd, int prefix)
-{
-	int	len;
-
-	if (!n)
-		return (ft_print_str("(nil)", 1));
-	len = 1;
-	if (prefix)
-		len += ft_print_str("0x", 1);
-	if (n > 15)
-		len += ft_print_address(n / 16, fd, 0);
-	ft_putchar_fd("0123456789abcdef"[n % 16], fd);
-	return (len);
-}
-
-int	ft_print_uint(unsigned int n, int fd)
-{
-	int		len;
-
-	len = 1;
-	if (n >= 10)
-	{
-		len += ft_print_uint(n / 10, fd);
-	}
-	ft_putchar_fd(n % 10 + '0', fd);
 	return (len);
 }
