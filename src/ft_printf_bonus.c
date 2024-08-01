@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include "../include/ft_printf.h"
 
+void	ft_print_whitespaces(int len, int space, int fd)
+{
+	while (len < space)
+	{
+		write(fd, " ", 1);
+		len++;
+	}
+}
+
 int	ft_print_int(int n, int fd)
 {
 	int	tmp;
@@ -69,22 +78,10 @@ int	ft_print_char_with_flags(int c, t_format_spec *spec, int fd)
 
 	len = 0;
 	if ((spec->min_space_used > 1) && !(spec->print_left))
-	{
-		while (len < (spec->min_space_used - 1))
-		{
-			write(fd, " ", 1);
-			len++;
-		}
-	}
+		ft_print_whitespaces(len, (spec->min_space_used - 1), fd);
 	len += write(1, &c, 1);
 	if ((spec->min_space_used > 1) && spec->print_left)
-	{
-		while (len < (spec->min_space_used - 1))
-		{
-			write(fd, " ", 1);
-			len++;
-		}
-	}
+		ft_print_whitespaces(len, (spec->min_space_used - 1), fd);
 	return (len);
 }
 
@@ -92,25 +89,13 @@ void	ft_print_left(char *s, t_format_spec *spec, int len, int fd)
 {
 		ft_putstr_fd(s, fd);
 		if (spec->min_space_used > len)
-		{
-			while (len < spec->min_space_used)
-			{
-				write(fd, " ", 1);
-				len++;
-			}
-		}
+			ft_print_whitespaces(len, (spec->min_space_used), fd);
 }
 
 void	ft_print_right(char *s, t_format_spec *spec, int len, int fd)
 {
 		if (spec->min_space_used > len)
-		{
-			while (len < spec->min_space_used)
-			{
-				write(fd, " ", 1);
-				len++;
-			}
-		}
+			ft_print_whitespaces(len, (spec->min_space_used), fd);
 		ft_putstr_fd(s, fd);
 }
 
@@ -231,29 +216,29 @@ int	ft_printf(char *s, ...)
 
 int	main(void)
 {
-	ft_printf("Kannst du das %c%c%-10c", 'a', 'b', 'c');
-	// printf("Strings:\n");	
-	// printf("1String -5.2\t: [%-5.2s]\n", "halloechen");
-	// printf("7String -15\t: [%-15s]\n", "halloechen");
-	// ft_printf("7ftString -15\t: [%-15s]\n", "halloechen");
-	// printf("2String -5.6\t: [%-5.6s]\n", "halloechen");
-	// ft_printf("2ftString -5.6\t: [%-5.6s]\n", "halloechen");
-	// printf("3String -5.6 ha\t: [%-5.6s]\n", "ha");
-	// ft_printf("3ftString -5.6 ha\t: [%-5.6s]\n", "ha");
-	// printf("5String -5\t: [%-5s]\n", "halloechen");
-	// ft_printf("5ftString -5\t: [%-5s]\n", "halloechen");
-	// printf("4String 5.6 ha\t: [%5.6s]\n", "ha");
-	// ft_printf("4ftString 5.6 ha\t: [%5.6s]\n", "ha");
-	// printf("6String 5.2\t: [%5.2s]\n", "halloechen");
-	// ft_printf("6ftString 5.2\t: [%5.2s]\n", "halloechen");
-	// printf("8String 15\t: [%15s]\n", "halloechen");
-	// ft_printf("8ftString 15\t: [%15s]\n", "halloechen");
-	// printf("9String 20.5\t: [%20.5s]\n", "halloechen");
-	// ft_printf("9ftString 20.5\t: [%20.5s]\n", "halloechen");
-	// printf("aString 5.5\t: [%5.5s]\n", "halloechen");
-	// ft_printf("aftString 5.5\t: [%5.5s]\n", "halloechen");
-	// printf("bString 5\t: [%5s]\n", "halloechen");
-	// ft_printf("bftString 5\t: [%5s]\n", "halloechen");
+	// ft_printf("Kannst du das %c%c%-10c", 'a', 'b', 'c');
+	printf("Strings:\n");	
+	printf("1String -5.2\t: [%-5.2s]\n", "halloechen");
+	printf("7String -15\t: [%-15s]\n", "halloechen");
+	ft_printf("7ftString -15\t: [%-15s]\n", "halloechen");
+	printf("2String -5.6\t: [%-5.6s]\n", "halloechen");
+	ft_printf("2ftString -5.6\t: [%-5.6s]\n", "halloechen");
+	printf("3String -5.6 ha\t: [%-5.6s]\n", "ha");
+	ft_printf("3ftString -5.6 ha\t: [%-5.6s]\n", "ha");
+	printf("5String -5\t: [%-5s]\n", "halloechen");
+	ft_printf("5ftString -5\t: [%-5s]\n", "halloechen");
+	printf("4String 5.6 ha\t: [%5.6s]\n", "ha");
+	ft_printf("4ftString 5.6 ha\t: [%5.6s]\n", "ha");
+	printf("6String 5.2\t: [%5.2s]\n", "halloechen");
+	ft_printf("6ftString 5.2\t: [%5.2s]\n", "halloechen");
+	printf("8String 15\t: [%15s]\n", "halloechen");
+	ft_printf("8ftString 15\t: [%15s]\n", "halloechen");
+	printf("9String 20.5\t: [%20.5s]\n", "halloechen");
+	ft_printf("9ftString 20.5\t: [%20.5s]\n", "halloechen");
+	printf("aString 5.5\t: [%5.5s]\n", "halloechen");
+	ft_printf("aftString 5.5\t: [%5.5s]\n", "halloechen");
+	printf("bString 5\t: [%5s]\n", "halloechen");
+	ft_printf("bftString 5\t: [%5s]\n", "halloechen");
 	// printf("Int\n");
 	// printf("1Int -11.5\t: [%-11.5i]\n", 11);
 	// printf("1Int -11.2\t: [%-11.2i]\n", 11);
