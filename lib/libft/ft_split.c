@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmasur <thmasur@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tmasur <thmasur@student.42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 12:58:06 by thmasur           #+#    #+#             */
-/*   Updated: 2024/06/10 12:58:06 by thmasur          ###   ########.fr       */
+/*   Created: 2024/08/06 17:23:22 by tmasur            #+#    #+#             */
+/*   Updated: 2024/08/06 17:23:22 by tmasur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,4 +200,5 @@ int main()
 }
 */
 
-// gcc -Werror -Wall -Wextra ft_split.c ft_substr.c ft_strdup.c ft_strlen.c ft_strlcpy.c
+// gcc -Werror -Wall -Wextra ft_split.c ft_substr.c ft_strdup.c
+// ft_strlen.c ft_strlcpy.c

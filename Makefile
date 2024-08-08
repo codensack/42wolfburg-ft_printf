@@ -38,7 +38,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c make_build_dir
 make_build_dir:
 	mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR)%.o: $(LIBFT_DIR)$(SRC_DIR)%.c
+$(OBJ_DIR)%.o: $(LIBFT_DIR)%.c
 	$(CC) $(FLAG) -c $< -o $@
 
 # Clean up ---------------------------------------------------------------------

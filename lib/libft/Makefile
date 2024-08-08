@@ -18,7 +18,6 @@ NAME	:=	libft.a
 
 # Directories ------------------------------------------------------------------
 SRC_DIR	:=	./
-# OBJ_DIR	:=	build/
 
 # Files ------------------------------------------------------------------------
 FILES	:=	ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c\

@@ -29,14 +29,14 @@ typedef struct s_format_spec
 } t_format_spec;
 
 // ft_printf.c
-int	ft_printf(const char *s, ...);
-int	ft_print_arg(va_list args, char c, int fd);
+int	ft_printf(char *s, ...);
+int	ft_print_arg(va_list args, t_format_spec *spec, int fd);
 // ft_printf_utils_numbers.c
 int	ft_print_int(int n, int fd);
 int	ft_print_uint(unsigned int n, int fd);
 int	ft_print_hex(int n, int fd, int is_uppercase);
 int	ft_print_address(unsigned long long int n, int fd, int prefix);
 // ft_printf_utils_alpha.c
-int	ft_print_char(int c, int fd);
+int	ft_print_char_with_flags(int c, t_format_spec *spec, int fd);
 int	ft_print_str(char *s, int fd);
 #endif
