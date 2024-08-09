@@ -18,6 +18,7 @@ NAME	:=	libft.a
 
 # Directories ------------------------------------------------------------------
 SRC_DIR	:=	./
+OBJ_DIR	:=	./
 
 # Files ------------------------------------------------------------------------
 FILES	:=	ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c\
@@ -65,7 +66,7 @@ so:
 
 # Clean up ---------------------------------------------------------------------
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(OBJ_B)
 
 fclean: clean
 	rm -f $(NAME)

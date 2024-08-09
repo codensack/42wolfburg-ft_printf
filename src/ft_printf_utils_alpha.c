@@ -12,12 +12,6 @@
 
 #include "../include/ft_printf.h"
 
-int	ft_print_char(int c, int fd)
-{
-	ft_putchar_fd((char)c, fd);
-	return (1);
-}
-
 int	ft_print_str(char *s, int fd)
 {
 	int	len;

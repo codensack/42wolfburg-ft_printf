@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/ft_printf.h"
+#include "../include/ft_printf_bonus.h"
 
 void	ft_print_whitespaces(int len, int space, int fd)
 {
@@ -62,10 +62,10 @@ int	ft_print_address(unsigned long long int n, int fd, int prefix)
 	int	len;
 
 	if (!n)
-		return (ft_print_str("(nil)", 1));
+		return (write(fd, "(nil)", 5));
 	len = 1;
 	if (prefix)
-		len += ft_print_str("0x", 1);
+		len += write(fd, "0x", 2);
 	if (n > 15)
 		len += ft_print_address(n / 16, fd, 0);
 	ft_putchar_fd("0123456789abcdef"[n % 16], fd);
@@ -105,7 +105,7 @@ int	ft_print_str_with_flags(char *s, t_format_spec *spec, int fd)
 	char	*str;
 
 	if (!s)
-		return (ft_print_str("(null)", 1));
+		return (write(fd, "(null)", 6));
 	len = ft_strlen(s);
 	if (spec->max_length_param && spec->max_length_param < len)
 		len = spec->max_length_param;
@@ -183,7 +183,7 @@ int	ft_print_arg(va_list args, t_format_spec *spec, int fd)
 	else if (spec->type == 'p')
 		return (ft_print_address(va_arg(args, unsigned long long int), fd, 1));
 	else if (spec->type == '%') 
-		return (ft_print_char('%', fd));
+		return (write(fd, "%", 1));
 	return (-1);
 }
 
@@ -207,7 +207,7 @@ int	ft_printf(char *s, ...)
 			s++;
 		}
 		else
-			len += ft_print_char(*(s++), fd);
+			len += write(fd, s++, 1);
 	}
 	va_end(vargs);
 	free(spec);
@@ -326,3 +326,4 @@ int	main(void)
 	// printf("iDez 0 \' \' 2\t: [% 2d]\n", 0);
 	// return (0);
 }
+// test

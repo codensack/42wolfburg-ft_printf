@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_BONUS_H
-# define FT_PRINTF_BONUS_H
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
 # include <stdarg.h>
 # include "../lib/libft/libft.h"
@@ -37,6 +37,5 @@ int	ft_print_uint(unsigned int n, int fd);
 int	ft_print_hex(int n, int fd, int is_uppercase);
 int	ft_print_address(unsigned long long int n, int fd, int prefix);
 // ft_printf_utils_alpha.c
-int	ft_print_char(int c, int fd);
 int	ft_print_str(char *s, int fd);
 #endif
